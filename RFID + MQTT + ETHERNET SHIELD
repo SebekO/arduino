@@ -1,0 +1,98 @@
+#include <SPI.h>
+#include <Ethernet.h>
+#include <PubSubClient.h>
+#include <RFID.h>
+#define SS_PIN 7
+#define RST_PIN 6
+RFID rfid(SS_PIN, RST_PIN); 
+    int serNum0;
+    int serNum1;
+    int serNum2;
+    int serNum3;
+    int serNum4;
+int caly;
+char* tempC;
+char message_buffer[100];
+//numer IP komputera na ktĂłrym jest uruchomiony serwer mqtt
+byte mqtt_server[] = { 192, 168, 1, 103 };
+byte mac[] = {
+  0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED
+};
+IPAddress ip(192, 168, 1, 5);
+void setup() {
+  Serial.begin(9600);
+  initializeMqtt();
+  initializeNetwork();
+  SPI.begin(); 
+  rfid.init();
+}
+void loop() {
+       
+  checkStol();
+  checkMqtt();
+}
+void initializeNetwork() {
+  Ethernet.begin(mac, ip);
+}
+void callback(char* topic, byte* payload, unsigned int length) {
+  payload[length] = '\0';
+  String strPayload = String((char*)payload);
+  Serial.print("IN: ");
+  Serial.println(strPayload);
+}
+EthernetClient client;
+PubSubClient mqtt_client(mqtt_server, 1883, callback, client);
+
+void sendMqttState(String state) {
+  Serial.print("STATE: ");
+  Serial.print(state);
+  /*
+    konieczna weryfikacja czy mamy aktywne poĹ‚Ä…czenie
+    jeĹ›li nie, trzeba je odnowiÄ‡
+  */
+  boolean connected = mqtt_client.connected();
+  if (!connected) {
+    initializeMqtt();
+  }
+  char ssid[state.length() + 1];
+  state.toCharArray(ssid, state.length() + 1);
+  boolean publishState = mqtt_client.publish("/temp", ssid);
+  Serial.print(" published: ");
+  Serial.println(publishState);
+}
+void initializeMqtt()
+{
+  if (mqtt_client.connect("arduinoClient", "admin", "admin")) {
+    mqtt_client.subscribe("/temp");
+    Serial.println("MQTT connect OK");
+  } else {
+    Serial.println("MQTT connect failed");
+  }
+}
+void checkMqtt()
+{
+  mqtt_client.loop();
+}
+void checkStol() {
+      if (rfid.isCard()) {
+        if (rfid.readCardSerial()) {
+            if (rfid.serNum[0] != serNum0
+                && rfid.serNum[1] != serNum1
+                && rfid.serNum[2] != serNum2
+                && rfid.serNum[3] != serNum3
+                && rfid.serNum[4] != serNum4
+            ) {
+                serNum0 = rfid.serNum[0];
+                serNum1 = rfid.serNum[1];
+                serNum2 = rfid.serNum[2];
+                serNum3 = rfid.serNum[3];
+                serNum4 = rfid.serNum[4];
+                caly = serNum0 + serNum1 + serNum2 + serNum3 + serNum4;
+                }          
+      }
+      tempC = dtostrf( caly, 5, 2, message_buffer); // TMP36 sensor calibration
+      sendMqttState(tempC);
+      delay(1000);
+      }
+    rfid.halt();  
+}
