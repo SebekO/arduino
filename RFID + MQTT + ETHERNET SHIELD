@@ -56,14 +56,14 @@ void sendMqttState(String state) {
   }
   char ssid[state.length() + 1];
   state.toCharArray(ssid, state.length() + 1);
-  boolean publishState = mqtt_client.publish("/temp", ssid);
+  boolean publishState = mqtt_client.publish("/rfid", ssid);
   Serial.print(" published: ");
   Serial.println(publishState);
 }
 void initializeMqtt()
 {
   if (mqtt_client.connect("arduinoClient", "admin", "admin")) {
-    mqtt_client.subscribe("/temp");
+    mqtt_client.subscribe("/rfid");
     Serial.println("MQTT connect OK");
   } else {
     Serial.println("MQTT connect failed");
