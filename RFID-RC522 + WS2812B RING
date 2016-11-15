@@ -2,11 +2,11 @@
 #include <RFID.h>
 #include <Adafruit_NeoPixel.h>
  
-#define PIN 6
-#define LICZBADIOD 16
+#define PIN 2
+#define LICZBADIOD 32
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(LICZBADIOD, PIN, NEO_GRB + NEO_KHZ800);
-#define SS_PIN 10
-#define RST_PIN 9
+#define SS_PIN 7
+#define RST_PIN 6
 RFID rfid(SS_PIN, RST_PIN); 
 
 
@@ -114,5 +114,3 @@ void loop()
     }
     rfid.halt();
 }
-
-
