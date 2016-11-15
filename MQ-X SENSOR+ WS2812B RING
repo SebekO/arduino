@@ -1,0 +1,72 @@
+#include <Adafruit_NeoPixel.h>
+int mq6_analogPin = A3;
+#define PIN 8
+#define LICZBADIOD 32
+ 
+Adafruit_NeoPixel pixels = Adafruit_NeoPixel(LICZBADIOD, PIN, NEO_GRB + NEO_KHZ800);
+void setup(){
+  pixels.begin();
+  Serial.begin(9600); // open serial at 9600 bps
+  delay(1000);
+}
+
+void loop()
+{
+    int mq6_value = analogRead(mq6_analogPin);
+//    mq6_value=map(mq6_value, 80, 1023, 300, 10000);
+    Serial.print("VALUE: ");
+    Serial.println(mq6_value);
+    delay(100);  
+    if(mq6_value<420){
+      int r=0, g=255, b=0;
+    pixels.setPixelColor(0, r,g,b);
+    pixels.setPixelColor(1, r,g,b);
+    pixels.setPixelColor(2, r,g,b);
+    pixels.setPixelColor(3, r,g,b);
+    pixels.setPixelColor(4, r,g,b);
+    pixels.setPixelColor(5, r,g,b);
+    pixels.setPixelColor(6, r,g,b);
+    pixels.setPixelColor(7, r,g,b);
+    pixels.setPixelColor(8, r,g,b);
+    pixels.setPixelColor(9, r,g,b);
+    pixels.setPixelColor(10, r,g,b);
+    pixels.setPixelColor(11, r,g,b);
+    pixels.setPixelColor(12, r,g,b);
+    pixels.setPixelColor(13, r,g,b);
+    pixels.setPixelColor(14, r,g,b);
+    pixels.setPixelColor(15, r,g,b);
+    pixels.setPixelColor(16, r,g,b);
+    pixels.show();
+    delay(100);
+    pixels.setBrightness(0);
+    pixels.show();
+    
+    delay(100);
+    pixels.setBrightness(255);
+    pixels.show();
+ }
+    else{
+    Serial.println("ALARM");
+    int r=255, g=0, b=0;
+    pixels.setPixelColor(0, r,g,b);
+    pixels.setPixelColor(1, r,g,b);
+    pixels.setPixelColor(2, r,g,b);
+    pixels.setPixelColor(3, r,g,b);
+    pixels.setPixelColor(4, r,g,b);
+    pixels.setPixelColor(5, r,g,b);
+    pixels.setPixelColor(6, r,g,b);
+    pixels.setPixelColor(7, r,g,b);
+    pixels.setPixelColor(8, r,g,b);
+    pixels.setPixelColor(9, r,g,b);
+    pixels.setPixelColor(10, r,g,b);
+    pixels.setPixelColor(11, r,g,b);
+    pixels.setPixelColor(12, r,g,b);
+    pixels.setPixelColor(13, r,g,b);
+    pixels.setPixelColor(14, r,g,b);
+    pixels.setPixelColor(15, r,g,b);
+    pixels.setPixelColor(16, r,g,b);
+    pixels.show();
+    }
+    delay(1000);
+   //Just here to slow down the output.
+}
