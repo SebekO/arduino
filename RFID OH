@@ -2,23 +2,31 @@
 #include <Ethernet.h>
 #include <PubSubClient.h>
 #include <RFID.h>
+
 #define SS_PIN 7
 #define RST_PIN 6
 RFID rfid(SS_PIN, RST_PIN); 
+
+// Setup variables:
     int serNum0;
     int serNum1;
     int serNum2;
     int serNum3;
     int serNum4;
+
 int caly;
 char* tempC;
 char message_buffer[100];
+
 //numer IP komputera na ktĂłrym jest uruchomiony serwer mqtt
 byte mqtt_server[] = { 192, 168, 1, 103 };
 byte mac[] = {
   0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED
 };
+
 IPAddress ip(192, 168, 1, 5);
+
+
 void setup() {
   Serial.begin(9600);
   initializeMqtt();
@@ -30,6 +38,7 @@ void loop() {
        
   checkStol();
   checkMqtt();
+
 }
 void initializeNetwork() {
   Ethernet.begin(mac, ip);
@@ -40,6 +49,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("IN: ");
   Serial.println(strPayload);
 }
+
 EthernetClient client;
 PubSubClient mqtt_client(mqtt_server, 1883, callback, client);
 
@@ -60,6 +70,7 @@ void sendMqttState(String state) {
   Serial.print(" published: ");
   Serial.println(publishState);
 }
+
 void initializeMqtt()
 {
   if (mqtt_client.connect("arduinoClient", "admin", "admin")) {
@@ -69,10 +80,13 @@ void initializeMqtt()
     Serial.println("MQTT connect failed");
   }
 }
+
 void checkMqtt()
 {
   mqtt_client.loop();
 }
+
+
 void checkStol() {
       if (rfid.isCard()) {
         if (rfid.readCardSerial()) {
@@ -92,7 +106,20 @@ void checkStol() {
       }
       tempC = dtostrf( caly, 5, 2, message_buffer); // TMP36 sensor calibration
       sendMqttState(tempC);
+      if(caly==530){
+        sendMqttState("mama");
+      } 
+      if(caly==396){
+        sendMqttState("ja");
+      }
+       if(caly==640){
+        sendMqttState("syn");
+      }
       delay(1000);
       }
-    rfid.halt();  
+    rfid.halt(); 
 }
+
+
+
+
