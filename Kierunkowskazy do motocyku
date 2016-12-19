@@ -211,6 +211,7 @@ void p_kierunek() {
   if( 70 == (mstick % 80) ) { pixels.setPixelColor( 4, r, g, b ); pixels.setPixelColor( 3, r, g, b ); pixels.show(); pixels.clear(); }
   mDelay(1);
   if( digitalRead(7) == LOW ) rKier = 255;
+  if( digitalRead(3) == LOW ) mstick = 0;
 }
 
 void l_kierunek() {
@@ -244,6 +245,7 @@ void l_kierunek() {
   if( 70 == (mstick % 80) ) { pixels.setPixelColor( 28, r, g, b ); pixels.setPixelColor( 27, r, g, b ); pixels.show(); pixels.clear(); }
   mDelay(1);
   if( digitalRead(7) == LOW ) rKier = 255;
+  if( digitalRead(2) == LOW ) mstick = 0;
 }
 
 void mDelay( int ms) {
