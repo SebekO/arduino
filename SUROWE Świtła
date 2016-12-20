@@ -1,0 +1,43 @@
+int x = 0;
+int r, g, b;
+void setup() {
+     Serial.begin(9600);
+  while (!Serial) {
+    ;}
+ pinMode( 7, INPUT_PULLUP ); // przycisk stopu
+ pinMode( 2, INPUT_PULLUP ); // przycisk kierunkowskazu P
+ pinMode( 3, INPUT_PULLUP ); // przycisk kierunkowskazu L
+ pinMode( 4, INPUT_PULLUP ); // przycisk wyłącznia kierunkowskazu
+ pinMode( 5, INPUT_PULLUP ); // przycisk wyłącznia kierunkowskazu
+}
+
+void loop() {
+  if( digitalRead(7) == LOW && digitalRead(3) != LOW && digitalRead(2) != LOW ) { x=0; Serial.println("STOP"); }  //stop
+  else if( digitalRead(3) == LOW ) { x=0; while( digitalRead(2) != LOW && digitalRead(4) != LOW ) Serial.println("LKIER"); }  //lewy kierunek 
+  else if( digitalRead(2) == LOW ) { x=0; while( digitalRead(3) != LOW && digitalRead(4) != LOW ) Serial.println("PKIER"); }//prawy kierunek
+  else if( digitalRead(4) == LOW )  Serial.println("zmiana");
+  else if( digitalRead(5) == LOW ) { x++; Serial.println(x); delay(200); if(x>3) x=0;}
+  switch(x){
+    case 1:
+    r = analogRead(A0);
+    r = map( r, 0, 1023, 0, 255);
+    Serial.println("case 1");
+    Serial.println(r);
+    break;
+    case 2:
+    g = analogRead(A0);
+    g = map( g, 0, 1023, 0, 255);
+    Serial.println("case 2");
+    Serial.println(g);
+    break;
+    case 3:
+    b = analogRead(A0);
+    b = map( b, 0, 1023, 0, 255);
+    Serial.println("case 3");
+    Serial.println(b);
+    break;
+    default:
+    Serial.println("brak");
+  }
+ 
+}
