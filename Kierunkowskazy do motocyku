@@ -1,27 +1,29 @@
 #include <Adafruit_NeoPixel.h>
- 
+
 #define PIN 6
 #define LICZBADIOD 32
-int delay_kier=0, czaswlanczania=50;
-int r, g, b;
-int rStart = 100, gStart = 0, bStart = 0;
-int rKier = 40, gKier = 0, bKier = 0;
-int mstick;
 
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(LICZBADIOD, PIN, NEO_GRB + NEO_KHZ800);
 
+
+int r = 100, g, b;
+int rStart = 100, gStart = 0, bStart = 0;
+int rKier = 40, gKier = 0, bKier = 0;
+int mstick;
+int czaswlanczania=50;
+int x = 0;
+
 void setup() {
-  pixels.begin(); // Inicjalizacja biblioteki
- pinMode( 7, INPUT_PULLUP ); // przycisk stopu
- pinMode( 2, INPUT_PULLUP ); // przycisk kierunkowskazu P
- pinMode( 3, INPUT_PULLUP ); // przycisk kierunkowskazu L
- pinMode( 1, INPUT_PULLUP ); // przycisk wyłącznia kierunkowskazu
-  _start();
-  
+   pixels.begin(); // Inicjalizacja biblioteki
    Serial.begin(9600);
-  while (!Serial) {
-    ;
-  }
+   while (!Serial) {
+    ; }
+   pinMode( 2, INPUT_PULLUP ); // przycisk kierunkowskazu P
+   pinMode( 3, INPUT_PULLUP ); // przycisk kierunkowskazu L
+   pinMode( 4, INPUT_PULLUP ); // przycisk wyłącznia kierunkowskazu
+   pinMode( 5, INPUT_PULLUP ); // przycisk zmiany funkcji
+   pinMode( 7, INPUT_PULLUP ); // przycisk stopu
+   _start();
 }
 
 void _start() {  
@@ -93,18 +95,38 @@ void _start() {
 }
 
 void loop() {
-  if( digitalRead(7) == HIGH && digitalRead(2) == HIGH && digitalRead(3) == HIGH ) {
+  if( digitalRead(7) == LOW && digitalRead(3) != LOW && digitalRead(2) != LOW ) { x=0; _stop(); Serial.println("STOP"); }  //stop
+  else if( digitalRead(2) == LOW ) { x=0; while( digitalRead(3) != LOW && digitalRead(4) != LOW ) { p_kierunek(); Serial.println("PKIER"); } }  //prawy kierunek
+  else if( digitalRead(3) == LOW ) { x=0; while( digitalRead(2) != LOW && digitalRead(4) != LOW ) { l_kierunek(); Serial.println("LKIER"); } }  //lewy kierunek 
+  else if( digitalRead(4) == LOW ) { mstick = 0; Serial.println("zmiana"); }
+  else if( digitalRead(5) == LOW ) { delay(200); x++;  Serial.println(x);  if(x>3) x=0;}
+  switch(x){
+    case 1:
+    r = analogRead(A0);
+    r = map( r, 0, 1023, 0, 255);
+    pixels.show();
+    Serial.println( "case 1" );
+    Serial.println(r);
+    break;
+    case 2:
+    g = analogRead(A0);
+    g = map( g, 0, 1023, 0, 255 );
+    pixels.show();
+    Serial.println( "case 2" );
+    Serial.println(g);
+    break;
+    case 3:
     b = analogRead(A0);
-    b = map( b, 0, 1023, 0, 255); 
+    b = map( b, 0, 1023, 0, 255 );
+    pixels.show();
+    Serial.println( "case 3" );
     Serial.println(b);
+    break;
+    default:
+    Serial.println( "brak" );
+    break;
   }
-  if( digitalRead(7) == LOW && digitalRead(2) == HIGH && digitalRead(3) == HIGH ) { _stop();  Serial.println("STOP"); }  //stop  
-  else if( digitalRead(3) == LOW ) { while( digitalRead(1) == LOW && digitalRead(2) == HIGH ) { l_kierunek(); Serial.println("LKIER"); } }  //lewy kierunek 
-  else if( digitalRead(2) == LOW ) { while( digitalRead(1) == LOW && digitalRead(3) == HIGH ) { p_kierunek(); Serial.println("PKIER"); } } //prawy kierunek
-  else {
-    mstick = 0; 
     pixels.clear(); 
-    r = 100;
     pixels.setBrightness(100);
     pixels.setPixelColor( 0, r, g, b );
     pixels.setPixelColor( 1, r, g, b );
@@ -139,44 +161,11 @@ void loop() {
     pixels.setPixelColor( 30, r, g, b );
     pixels.setPixelColor( 31, r, g, b );
     pixels.show();
-  }
 }
 
 void _stop(){
   r = 255; g = 0; b = 0;
   pixels.setBrightness(255);
-  pixels.setPixelColor( 0, r, g, b );
-  pixels.setPixelColor( 1, r, g, b );
-  pixels.setPixelColor( 2, r, g, b );
-  pixels.setPixelColor( 3, r, g, b );
-  pixels.setPixelColor( 4, r, g, b );
-  pixels.setPixelColor( 5, r, g, b );
-  pixels.setPixelColor( 6, r, g, b );
-  pixels.setPixelColor( 7, r, g, b );
-  pixels.setPixelColor( 8, r, g, b );
-  pixels.setPixelColor( 9, r, g, b );
-  pixels.setPixelColor( 10, r, g, b );
-  pixels.setPixelColor( 11, r, g, b );
-  pixels.setPixelColor( 12, r, g, b );
-  pixels.setPixelColor( 13, r, g, b );
-  pixels.setPixelColor( 14, r, g, b );
-  pixels.setPixelColor( 15, r, g, b );
-  pixels.setPixelColor( 16, r, g, b );
-  pixels.setPixelColor( 17, r, g, b );
-  pixels.setPixelColor( 18, r, g, b );
-  pixels.setPixelColor( 19, r, g, b );
-  pixels.setPixelColor( 20, r, g, b );
-  pixels.setPixelColor( 21, r, g, b );
-  pixels.setPixelColor( 22, r, g, b );
-  pixels.setPixelColor( 23, r, g, b );
-  pixels.setPixelColor( 24, r, g, b );
-  pixels.setPixelColor( 25, r, g, b );
-  pixels.setPixelColor( 26, r, g, b );
-  pixels.setPixelColor( 27, r, g, b );
-  pixels.setPixelColor( 28, r, g, b );
-  pixels.setPixelColor( 29, r, g, b );
-  pixels.setPixelColor( 30, r, g, b );
-  pixels.setPixelColor( 31, r, g, b );
   pixels.show();
 }
 
@@ -258,5 +247,3 @@ void mDelay( int ms) {
     Serial.println(mstick);
   }
 }
-    
-    
