@@ -188,7 +188,7 @@ void p_kierunek() {
   pixels.setPixelColor( 31, rKier, g, b );
   pixels.show();
   rKier=40; g = 0; b = 0;
-  int r=192,g=64,b;
+  int r = 240, g = 48, b;
   pixels.setBrightness(255);
   if( 00 == (mstick % 80) ) { pixels.setPixelColor( 11, r, g, b ); pixels.setPixelColor( 12, r, g, b ); pixels.show(); }
   if( 10 == (mstick % 80) ) { pixels.setPixelColor( 10, r, g, b ); pixels.setPixelColor( 13, r, g, b ); pixels.show(); }
@@ -204,25 +204,25 @@ void p_kierunek() {
 }
 
 void l_kierunek() {
-  pixels.setPixelColor(0, rKier,g,b);
-  pixels.setPixelColor(1, rKier,g,b);
-  pixels.setPixelColor(2, rKier,g,b);
-  pixels.setPixelColor(3, rKier,g,b);
-  pixels.setPixelColor(4, rKier,g,b);
-  pixels.setPixelColor(5, rKier,g,b);
-  pixels.setPixelColor(6, rKier,g,b);
-  pixels.setPixelColor(7, rKier,g,b);
-  pixels.setPixelColor(8, rKier,g,b);
-  pixels.setPixelColor(9, rKier,g,b);
-  pixels.setPixelColor(10, rKier,g,b);
-  pixels.setPixelColor(11, rKier,g,b);
-  pixels.setPixelColor(12, rKier,g,b);
-  pixels.setPixelColor(13, rKier,g,b);
-  pixels.setPixelColor(14, rKier,g,b);
-  pixels.setPixelColor(15, rKier,g,b);
+  pixels.setPixelColor( 0, rKier, g, b );
+  pixels.setPixelColor( 1, rKier, g, b );
+  pixels.setPixelColor( 2, rKier, g, b );
+  pixels.setPixelColor( 3, rKier, g, b );
+  pixels.setPixelColor( 4, rKier, g, b );
+  pixels.setPixelColor( 5, rKier, g, b );
+  pixels.setPixelColor( 6, rKier, g, b );
+  pixels.setPixelColor( 7, rKier, g, b );
+  pixels.setPixelColor( 8, rKier, g, b );
+  pixels.setPixelColor( 9, rKier, g, b );
+  pixels.setPixelColor( 10, rKier, g, b );
+  pixels.setPixelColor( 11, rKier, g, b );
+  pixels.setPixelColor( 12, rKier, g, b );
+  pixels.setPixelColor( 13, rKier, g, b );
+  pixels.setPixelColor( 14, rKier, g, b );
+  pixels.setPixelColor( 15, rKier, g, b );
   pixels.show();
-  rKier=40; g = 0; b = 0;
-  int r=192,g=64,b;
+  rKier = 40; g = 0; b = 0;
+  int r = 240,g = 48, b;
   pixels.setBrightness(255);
   if( 00 == (mstick % 80) ) { pixels.setPixelColor( 19, r, g, b ); pixels.setPixelColor( 20, r, g, b ); pixels.show(); }
   if( 10 == (mstick % 80) ) { pixels.setPixelColor( 18, r, g, b ); pixels.setPixelColor( 21, r, g, b ); pixels.show(); }
